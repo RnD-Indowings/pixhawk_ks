@@ -4,7 +4,19 @@ import numpy as np
 from pymavlink import mavutil
 from math import radians, cos, sin, sqrt, atan2, asin, degrees
 import time
+import time
+import time
+import sys
+from datetime import datetime
 
+timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+log_filename = f"drone_output_{timestamp}.txt"
+
+#time.sleep(120)
+
+
+# Redirect stdout to the file
+sys.stdout = open(log_filename, "w")
 vehicle = connect('127.0.0.1:14569', wait_ready=True)
 
 def arm_and_takeoff(target_altitude):
@@ -121,7 +133,7 @@ def adjust_course_to_target(target_location):
     """
     distance = get_distance_meters(target_location)
 
-    vx = 15  # Maintain full speed
+    vx = 20  # Maintain full speed
     current_altitude = vehicle.location.global_relative_frame.alt
     target_altitude = target_location.alt
 
@@ -145,7 +157,7 @@ def trigger_final_mechanism():
     print("Final strike initiated!")
 
 try:
-    arm_and_takeoff(100) 
+    arm_and_takeoff(30) 
     target_location = LocationGlobalRelative(-35.36216065, 149.16122379, 1)  # Example target
     
     align_heading_to_target(target_location)  # Align the UAV to face the target
